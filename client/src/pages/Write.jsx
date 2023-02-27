@@ -3,19 +3,22 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
 import axios, * as others from "axios";
+import { useLocation } from "react-router-dom";
+import moment from "moment";
 
 const Write = () => {
-  const [value, setValue] = useState("");
-  const [title, setTitle] = useState("");
+  const state = useLocation().state;
+  const [value, setValue] = useState(state?.desc || "");
+  const [title, setTitle] = useState(state?.title || "");
   const [file, setFile] = useState(null);
-  const [cat, setCat] = useState("");
+  const [cat, setCat] = useState(state?.cat || "");
 
   const upload = async () => {
     try {
       const formData = new FormData();
       formData.append("file", file);
       const res = await axios.post("/upload", formData);
-      console.log(res.data);
+      return res.data;
     } catch (err) {
       console.log(err);
     }
@@ -23,13 +26,30 @@ const Write = () => {
 
   const handleClick = async (e) => {
     e.preventDefault();
-    upload();
+    const imgUrl = await upload();
+    try {
+      state
+        ? await axios.put(`/posts/${state.id}`, {
+            title,
+            desc: value,
+            cat,
+            img: file ? imgUrl : "",
+          })
+        : await axios.post(`/posts/`, {
+            title,
+            desc: value,
+            cat,
+            img: file ? imgUrl : "",
+            date: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
+          });
+    } catch (err) {}
   };
 
   return (
     <div className="add">
       <div className="content">
         <input
+          value={title}
           type="text"
           placeholder="Title"
           onChange={(e) => setTitle(e.target.value)}
@@ -74,7 +94,8 @@ const Write = () => {
           <div className="cat">
             <input
               type="radio"
-              name="cat"
+              checked={cat === "art"}
+              name="art"
               value="art"
               id="art"
               onChange={(e) => setCat(e.target.value)}
@@ -85,7 +106,8 @@ const Write = () => {
           <div className="cat">
             <input
               type="radio"
-              name="cat"
+              checked={cat === "science"}
+              name="science"
               value="science"
               id="science"
               onChange={(e) => setCat(e.target.files[0])}
@@ -96,7 +118,8 @@ const Write = () => {
           <div className="cat">
             <input
               type="radio"
-              name="cat"
+              checked={cat === "technology"}
+              name="technology"
               value="technology"
               id="technology"
               onChange={(e) => setCat(e.target.files[0])}
@@ -107,7 +130,8 @@ const Write = () => {
           <div className="cat">
             <input
               type="radio"
-              name="cat"
+              checked={cat === "cinema"}
+              name="cinema"
               value="cinema"
               id="cinema"
               onChange={(e) => setCat(e.target.value)}
@@ -118,7 +142,8 @@ const Write = () => {
           <div className="cat">
             <input
               type="radio"
-              name="cat"
+              checked={cat === "design"}
+              name="design"
               value="design"
               id="design"
               onChange={(e) => setCat(e.target.value)}
@@ -129,7 +154,8 @@ const Write = () => {
           <div className="cat">
             <input
               type="radio"
-              name="cat"
+              checked={cat === "food"}
+              name="food"
               value="food"
               id="food"
               onChange={(e) => setCat(e.target.value)}

@@ -40,7 +40,7 @@ const Single = () => {
   return (
     <div className="single">
       <div className="content">
-        <img src={post?.img} alt="" />
+        <img src={`../../public/uploads/${post?.img}`} alt="" />
         <div className="user">
           {post.userImg && <img src={post.userImg} alt="" />}
           <div className="info">
@@ -49,7 +49,7 @@ const Single = () => {
           </div>
           {currUser.username === post.username && (
             <div className="edit">
-              <Link className="edit" to={`/write?edit=2`}>
+              <Link className="edit" to={`/write?edit=2`} state={post}>
                 <img src={Edit} alt="" />
               </Link>
               <img onClick={handleDelete} src={Delete} alt="" />
