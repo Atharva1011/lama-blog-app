@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-const axios = require("axios");
+import axios, * as others from "axios";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);

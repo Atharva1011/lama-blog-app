@@ -5,7 +5,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import Menu from "../components/Menu";
 import moment from "moment";
 import { AuthContext } from "../context/authContext";
-const axios = require("axios");
+import axios, * as others from "axios";
 
 const Single = () => {
   const [post, setPost] = useState([]);

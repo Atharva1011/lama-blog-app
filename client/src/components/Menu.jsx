@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const axios = require("axios");
+import axios, * as others from "axios";
 
 const Menu = ({ cat }) => {
   const [posts, setPosts] = useState([]);
